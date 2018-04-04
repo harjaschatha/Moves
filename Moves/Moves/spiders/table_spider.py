@@ -1,4 +1,9 @@
 import scrapy
+import json
+
+moves_filename = 'moves.json'
+with open(moves_filename, 'wb') as f:
+    f.write("{")
 
 
 class QuotesSpider(scrapy.Spider):
@@ -62,6 +67,7 @@ class QuotesSpider(scrapy.Spider):
 
         name = response.xpath('/html/body/article/h1//text()').extract_first()
 
+        moves = {}
         moves_for_pokemon = {}
         for i, selector in enumerate(ultra_series_moves):
             sub_moves = []
@@ -83,9 +89,8 @@ class QuotesSpider(scrapy.Spider):
                     move_name = row.css("td a.ent-name::text").extract_first()
                     move = {'tm': tm, 'name': move_name}
                 sub_moves.append(move)
-            moves_for_pokemon[MOVE_TYPES[i]] = sub_moves
-            yield moves_for_pokemon
+            moves[MOVE_TYPES[i]] = sub_moves
+            moves_for_pokemon[name] = moves
 
-
-
-            
+            with open(moves_filename, 'wb') as f:
+                f.write("{},".format(json.dumps(moves_for_pokemon)))

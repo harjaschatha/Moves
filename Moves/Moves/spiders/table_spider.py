@@ -1,6 +1,6 @@
 import scrapy
 
-MOVES = {}
+
 class QuotesSpider(scrapy.Spider):
     name = 'pokenames'
     start_urls = ['https://pokemondb.net/pokedex/national']
@@ -84,11 +84,3 @@ class QuotesSpider(scrapy.Spider):
                     move = {'tm': tm, 'name': move_name}
                 sub_moves.append(move)
             moves_for_pokemon[MOVE_TYPES[i]] = sub_moves
-
-        MOVES[name] = moves_for_pokemon
-
-
-
-
-
-

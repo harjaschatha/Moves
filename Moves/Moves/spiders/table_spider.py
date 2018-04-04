@@ -2,7 +2,7 @@ import scrapy
 import json
 
 moves_filename = 'moves.json'
-with open(moves_filename, 'wb') as f:
+with open(moves_filename, 'w') as f:
     f.write("{")
 
 
@@ -31,7 +31,7 @@ class QuotesSpider(scrapy.Spider):
         # we will create a new URL for each pokemon in the pokemons list
         i = 1
         base_url = "https://pokemondb.net/pokedex/"
-        for name in names[:2]:
+        for name in names[:251]:
             if name == "Farfetch'd":
                 name = "farfetchd"
             elif name == 'Mr. Mime':
@@ -90,7 +90,6 @@ class QuotesSpider(scrapy.Spider):
                     move = {'tm': tm, 'name': move_name}
                 sub_moves.append(move)
             moves[MOVE_TYPES[i]] = sub_moves
-            moves_for_pokemon[name] = moves
 
-            with open(moves_filename, 'wb') as f:
-                f.write("{},".format(json.dumps(moves_for_pokemon)))
+        with open(moves_filename, 'a') as f:
+            f.write('"{}": {},\n'.format(name, json.dumps(moves)))
